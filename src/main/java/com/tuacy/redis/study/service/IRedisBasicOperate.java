@@ -1,24 +1,24 @@
 package com.tuacy.redis.study.service;
 
 /**
- * @name: IRedisCommonService
+ * @name: IRedisBasicOperate
  * @author: tuacy.
  * @date: 2019/6/4.
  * @version: 1.0
- * @Description:
+ * @Description: redis基本操作
  */
-public interface IRedisCommonService {
+public interface IRedisBasicOperate {
     /**
-     * 设置key对应失效时间
+     * 设置key失效时间
      *
      * @param key  键
-     * @param time 时间(秒)
+     * @param expireTime 时间(秒)
      * @return 是否设置成功
      */
-    boolean expire(String key, long time);
+    boolean expire(String key, long expireTime);
 
     /**
-     * 获取key对应过期时间
+     * 获取key失效时间
      *
      * @param key 键 不能为null
      * @return 时间(秒) 返回0代表为永久有效
@@ -36,7 +36,7 @@ public interface IRedisCommonService {
     /**
      * 删除key
      *
-     * @param key 可以传一个值 或多个
+     * @param key 可以传一个或多个值
      */
     void del(String... key);
 }
