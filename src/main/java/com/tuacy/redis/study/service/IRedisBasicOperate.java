@@ -11,16 +11,16 @@ public interface IRedisBasicOperate {
     /**
      * 设置key失效时间
      *
-     * @param key  键
+     * @param key        键
      * @param expireTime 时间(秒)
      * @return 是否设置成功
      */
     boolean expire(String key, long expireTime);
 
     /**
-     * 获取key失效时间
+     * 获取key对应的失效时间
      *
-     * @param key 键 不能为null
+     * @param key 键
      * @return 时间(秒) 返回0代表为永久有效
      */
     long getExpire(String key);

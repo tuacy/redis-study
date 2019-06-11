@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
  * @Description: RedisTemplate<String, Object>
  */
 @Service
-public class RedisTemplateServiceImpl extends ARedisOperateImpl<Object> {
+public class ObjectRedisTemplateServiceImpl extends ARedisOperateImpl<Object> {
 
     private RedisTemplate<String, Object> redisTemplate;
 

@@ -13,10 +13,10 @@ import java.util.Set;
  */
 public interface IRedisOperate<V> extends IRedisBasicOperate {
 
-    //============================String=============================
+    //============================ Redis数据类型：String 字符串
 
     /**
-     * redis(String) 获取数据
+     * redis数据类型(String 字符串) 获取数据
      *
      * @param key 键
      * @return 值
@@ -24,39 +24,37 @@ public interface IRedisOperate<V> extends IRedisBasicOperate {
     V get(String key);
 
     /**
-     * redis(String) 存数据
+     * redis数据类型(String 字符串) 存数据
      *
      * @param key   键
      * @param value 值
-     * @return 是否成功
      */
-    boolean set(String key, V value);
+    void set(String key, V value);
 
     /**
-     * redis(String) 存数据
+     * redis数据类型(String 字符串) 存数据
      *
      * @param key        键
      * @param value      值
      * @param expireTime 过期时间
-     * @return 是否成功
      */
-    boolean set(String key, Object value, long expireTime);
+    void set(String key, V value, long expireTime);
 
     /**
-     * redis(String) 递增
+     * redis数据类型(String 字符串) 递增
      *
      * @param key   键
      * @param delta 递增因子
-     * @return
+     * @return 修改之后的值
      */
     long incr(String key, long delta);
 
     /**
-     * redis(String) 递减
+     * redis数据类型(String 字符串) 递减
      *
      * @param key   键
      * @param delta 递减因子
-     * @return
+     * @return 修改之后的值
      */
     long decr(String key, long delta);
 
@@ -84,9 +82,8 @@ public interface IRedisOperate<V> extends IRedisBasicOperate {
      *
      * @param key 键
      * @param map Map
-     * @return 是否成功
      */
-    boolean hmset(String key, Map<String, V> map);
+    void hmset(String key, Map<String, V> map);
 
     /**
      * redis(HashMap) 设置Map + 过期时间

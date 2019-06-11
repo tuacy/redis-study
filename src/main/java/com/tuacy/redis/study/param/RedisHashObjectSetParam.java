@@ -1,6 +1,6 @@
 package com.tuacy.redis.study.param;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @name: RedisIntegerSetParam
@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class RedisHashObjectSetParam {
 
     private String redisKey;
-    private HashMap<String, String> redisValue;
+    private Map<String, String> redisValue;
 
     public String getRedisKey() {
         return redisKey;
@@ -22,11 +22,11 @@ public class RedisHashObjectSetParam {
         this.redisKey = redisKey;
     }
 
-    public HashMap<String, String> getRedisValue() {
+    public Map<String, String> getRedisValue() {
         return redisValue;
     }
 
-    public void setRedisValue(HashMap<String, String> redisValue) {
+    public void setRedisValue(Map<String, String> redisValue) {
         this.redisValue = redisValue;
     }
 }

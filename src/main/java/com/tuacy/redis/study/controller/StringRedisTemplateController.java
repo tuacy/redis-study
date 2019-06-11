@@ -2,7 +2,7 @@ package com.tuacy.redis.study.controller;
 
 import com.tuacy.redis.study.entity.param.ParamRedisSet;
 import com.tuacy.redis.study.entity.response.ResponseData;
-import com.tuacy.redis.study.service.StringRedisTemplateService;
+import com.tuacy.redis.study.service.impl.StringRedisTemplateServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,12 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/redisStudy/stringRedisTemplate")
 public class StringRedisTemplateController {
 
-    private StringRedisTemplateService redisService;
+    private StringRedisTemplateServiceImpl redisService;
 
     @Autowired
-    public void setRedisService(StringRedisTemplateService redisService) {
+    public void setRedisService(StringRedisTemplateServiceImpl redisService) {
         this.redisService = redisService;
     }
+
 
     @RequestMapping(value = "set", method = RequestMethod.POST)
     public ResponseData<String> redisSet(@RequestBody ParamRedisSet param) {
