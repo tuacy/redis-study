@@ -91,9 +91,8 @@ public interface IRedisOperate<V> extends IRedisBasicOperate {
      * @param key        键
      * @param map        Map
      * @param expireTime 过期时间(秒)
-     * @return 是否成功
      */
-    boolean hmset(String key, Map<String, V> map, long expireTime);
+    void hmset(String key, Map<String, V> map, long expireTime);
 
     /**
      * redis(HashMap) 设置Map键和值
@@ -101,9 +100,8 @@ public interface IRedisOperate<V> extends IRedisBasicOperate {
      * @param key      键
      * @param mapKey   Map键
      * @param mapValue Map值
-     * @return 是否成功
      */
-    boolean hset(String key, String mapKey, V mapValue);
+    void hset(String key, String mapKey, V mapValue);
 
     /**
      * redis(HashMap) 设置Map键和值 + 过期时间
@@ -112,9 +110,8 @@ public interface IRedisOperate<V> extends IRedisBasicOperate {
      * @param mapKey     Map键
      * @param mapValue   Map值
      * @param expireTime 时间(秒)  注意:如果已存在的hash表有时间,这里将会替换原有的时间
-     * @return 是否成功
      */
-    boolean hset(String key, String mapKey, V mapValue, long expireTime);
+    void hset(String key, String mapKey, V mapValue, long expireTime);
 
 
     /**

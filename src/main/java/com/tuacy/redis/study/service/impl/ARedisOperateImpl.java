@@ -1,6 +1,7 @@
 package com.tuacy.redis.study.service.impl;
 
 import com.tuacy.redis.study.service.IRedisOperate;
+import com.tuacy.redis.study.utils.ConvertUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.util.CollectionUtils;
 
@@ -150,40 +151,68 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
         redisTemplate.opsForHash().putAll(key, map);
     }
 
+    /**
+     * redis(HashMap) 设置Map + 过期时间
+     *
+     * @param key        键
+     * @param map        Map
+     * @param expireTime 过期时间(秒)
+     */
     @Override
-    public boolean hmset(String key, Map<String, V> map, long expireTime) {
+    public void hmset(String key, Map<String, V> map, long expireTime) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-        return false;
+        redisTemplate.opsForHash().putAll(key, map);
+        if (expireTime > 0) {
+            expire(key, expireTime);
+        }
     }
 
+    /**
+     * redis(HashMap) 设置Map键和值
+     *
+     * @param key      键
+     * @param mapKey   Map键
+     * @param mapValue Map值
+     */
     @Override
-    public boolean hset(String key, String mapKey, V mapValue) {
+    public void hset(String key, String mapKey, V mapValue) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-        return false;
+        redisTemplate.opsForHash().put(key, mapKey, mapValue);
     }
 
+    /**
+     * redis(HashMap) 设置Map键和值 + 过期时间
+     *
+     * @param key        键
+     * @param mapKey     Map键
+     * @param mapValue   Map值
+     * @param expireTime 时间(秒)  注意:如果已存在的hash表有时间,这里将会替换原有的时间
+     */
     @Override
-    public boolean hset(String key, String mapKey, V mapValue, long expireTime) {
+    public void hset(String key, String mapKey, V mapValue, long expireTime) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-        return false;
+        redisTemplate.opsForHash().put(key, mapKey, mapValue);
+        if (expireTime > 0) {
+            expire(key, expireTime);
+        }
     }
 
     @Override
     public void hdel(String key, String... mapKey) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-
+        redisTemplate.opsForHash().delete(key, ConvertUtil.convert(mapKey));
     }
 
     @Override
     public boolean hHasKey(String key, String mapKey) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-        return false;
+        return redisTemplate.opsForHash().hasKey(key, mapKey);
     }
 
     @Override
     public double hincr(String key, String mapKey, double delta) {
         RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
-        return 0;
+        return redisTemplate.opsForHash().increment(key, mapKey, delta);
     }
 
     @Override
