@@ -7,8 +7,10 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+
 
 /**
  * @name: ARedisOperateImpl
@@ -26,17 +28,6 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     protected abstract RedisTemplate<String, V> getRedisTemplate();
 
-    private void checkRedisTemplate() {
-        if (getRedisTemplate() == null) {
-            throw new NullPointerException("RedisTemplate为null!");
-        }
-    }
-
-    private RedisTemplate<String, V> getRedisTemplateAndCheckNoNull() {
-        checkRedisTemplate();
-        return getRedisTemplate();
-    }
-
     //============================ Redis数据类型：String 字符串
 
     /**
@@ -47,7 +38,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public V get(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return key == null ? null : redisTemplate.opsForValue().get(key);
     }
 
@@ -59,7 +50,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void set(String key, V value) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -72,7 +63,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void set(String key, V value, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         if (expireTime > 0) {
             redisTemplate.opsForValue().set(key, value, expireTime, TimeUnit.SECONDS);
         } else {
@@ -89,7 +80,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public long incr(String key, long delta) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         Long redisIncrement = redisTemplate.opsForValue().increment(key, delta);
         if (redisIncrement == null) {
             throw new IllegalArgumentException("incr()函数异常");
@@ -106,7 +97,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public long decr(String key, long delta) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         Long redisIncrement = redisTemplate.opsForValue().increment(key, -delta);
         if (redisIncrement == null) {
             throw new IllegalArgumentException("decr()函数异常");
@@ -122,7 +113,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public Map<String, V> hmget(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return null;
     }
 
@@ -135,7 +126,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public V hget(String key, String mapKey) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return null;
     }
 
@@ -147,7 +138,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void hmset(String key, Map<String, V> map) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForHash().putAll(key, map);
     }
 
@@ -160,7 +151,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void hmset(String key, Map<String, V> map, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForHash().putAll(key, map);
         if (expireTime > 0) {
             expire(key, expireTime);
@@ -176,7 +167,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void hset(String key, String mapKey, V mapValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForHash().put(key, mapKey, mapValue);
     }
 
@@ -190,7 +181,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public void hset(String key, String mapKey, V mapValue, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForHash().put(key, mapKey, mapValue);
         if (expireTime > 0) {
             expire(key, expireTime);
@@ -199,115 +190,115 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
 
     @Override
     public void hdel(String key, String... mapKey) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         redisTemplate.opsForHash().delete(key, ConvertUtil.convert(mapKey));
     }
 
     @Override
     public boolean hHasKey(String key, String mapKey) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return redisTemplate.opsForHash().hasKey(key, mapKey);
     }
 
     @Override
     public double hincr(String key, String mapKey, double delta) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return redisTemplate.opsForHash().increment(key, mapKey, delta);
     }
 
     @Override
     public double hdecr(String key, String mapKey, double delta) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public Set<V> sGet(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return null;
     }
 
     @Override
     public boolean sHasKey(String key, V setItemValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public long sSet(String key, V... setValues) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public long sSet(String key, long time, Object... setValues) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public long sGetSetSize(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public long setRemove(String key, Object... setValues) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public List<V> lGet(String key, long start, long end) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return null;
     }
 
     @Override
     public long lGetListSize(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
     @Override
     public V lGetIndex(String key, long index) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return null;
     }
 
     @Override
     public boolean lSet(String key, V listItemValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public boolean lSet(String key, V listItemValue, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public boolean lSet(String key, List<V> listValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public boolean lSet(String key, List<V> listValue, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public boolean lUpdateIndex(String key, long index, V listItemValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return false;
     }
 
     @Override
     public long lRemove(String key, long count, V listItemValue) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         return 0;
     }
 
@@ -320,7 +311,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public boolean expire(String key, long expireTime) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         if (expireTime > 0) {
             Boolean redisResult = redisTemplate.expire(key, expireTime, TimeUnit.SECONDS);
             return redisResult == null ? false : redisResult;
@@ -337,7 +328,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public long getExpire(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         Long redisExpireTime = redisTemplate.getExpire(key, TimeUnit.SECONDS);
         return redisExpireTime == null ? 0 : redisExpireTime;
     }
@@ -350,7 +341,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
      */
     @Override
     public boolean hasKey(String key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         Boolean redisHasKey = redisTemplate.hasKey(key);
         return redisHasKey == null ? false : redisHasKey;
     }
@@ -363,7 +354,7 @@ public abstract class ARedisOperateImpl<V> implements IRedisOperate<V> {
     @SuppressWarnings("unchecked")
     @Override
     public void del(String... key) {
-        RedisTemplate<String, V> redisTemplate = getRedisTemplateAndCheckNoNull();
+        RedisTemplate<String, V> redisTemplate = Optional.of(getRedisTemplate()).get();
         if (key != null && key.length > 0) {
             if (key.length == 1) {
                 redisTemplate.delete(key[0]);
